@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { getProfileByUsername, getUserPosts, updateProfile } from "@/actions/profile.actions";
 import { toggleFollow } from "@/actions/user.actions";
@@ -6,7 +6,13 @@ import PostCard from "@/components/PostCard";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Dialog, DialogClose, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
@@ -14,26 +20,33 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
 import { SignInButton, useUser } from "@clerk/nextjs";
 import { format } from "date-fns";
-import { CalendarIcon, EditIcon, FileTextIcon, HeartIcon, LinkIcon, MapPinIcon } from "lucide-react";
+import {
+  CalendarIcon,
+  EditIcon,
+  FileTextIcon,
+  HeartIcon,
+  LinkIcon,
+  MapPinIcon,
+} from "lucide-react";
 import { useState } from "react";
 import toast from "react-hot-toast";
 
 type User = Awaited<ReturnType<typeof getProfileByUsername>>;
 type Posts = Awaited<ReturnType<typeof getUserPosts>>;
 
-interface ProfilePageClientProps{
+interface ProfilePageClientProps {
   user: NonNullable<User>;
   posts: Posts;
   likedPosts: Posts;
   isFollowing: boolean;
 }
+
 function ProfilePageClient({
   isFollowing: initialIsFollowing,
   likedPosts,
   posts,
   user,
 }: ProfilePageClientProps) {
-
   const { user: currentUser } = useUser();
   const [showEditDialog, setShowEditDialog] = useState(false);
   const [isFollowing, setIsFollowing] = useState(initialIsFollowing);
@@ -45,7 +58,7 @@ function ProfilePageClient({
     location: user.location || "",
     website: user.website || "",
   });
-  
+
   const handleEditSubmit = async () => {
     const formData = new FormData();
     Object.entries(editForm).forEach(([key, value]) => {
@@ -59,7 +72,7 @@ function ProfilePageClient({
     }
   };
 
-    const handleFollow = async () => {
+  const handleFollow = async () => {
     if (!currentUser) return;
 
     try {
@@ -79,7 +92,7 @@ function ProfilePageClient({
 
   const formattedDate = format(new Date(user.createdAt), "MMMM yyyy");
 
-   return (
+  return (
     <div className="max-w-3xl mx-auto">
       <div className="grid grid-cols-1 gap-6">
         <div className="w-full max-w-lg mx-auto">
@@ -264,5 +277,4 @@ function ProfilePageClient({
     </div>
   );
 }
-
-export default ProfilePageClient
+export default ProfilePageClient;
