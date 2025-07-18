@@ -1,14 +1,15 @@
-import { getProfileByUsername, getUserLikedPosts, getUserPosts, isFollowing } from "@/actions/profile.actions";
+import {
+  getProfileByUsername,
+  getUserLikedPosts,
+  getUserPosts,
+  isFollowing,
+} from "@/actions/profile.actions";
 import { notFound } from "next/navigation";
 import ProfilePageClient from "./ProfilePageClient";
-import type { Metadata } from "next";
 
-// ✅ DO NOT define a custom `Props` type — Next.js now enforces a specific signature
-
-export async function generateMetadata(
-  { params }: { params: { username: string } }
-): Promise<Metadata | undefined> {
-  const user = await getProfileByUsername(params.username);
+export async function generateMetadata({ params }: { params: Promise<{ username: string }> }) {
+  const resolvedParams = await params;
+  const user = await getProfileByUsername(resolvedParams.username);
   if (!user) return;
 
   return {
@@ -17,12 +18,11 @@ export async function generateMetadata(
   };
 }
 
-// ✅ Page must be the default export and directly use `params`
-export default async function Page(
-  { params }: { params: { username: string } }
-) {
-  const user = await getProfileByUsername(params.username);
-  if (!user) return notFound();
+async function ProfilePageServer({ params }: { params: Promise<{ username: string }> }) {
+  const resolvedParams = await params;
+  const user = await getProfileByUsername(resolvedParams.username);
+
+  if (!user) notFound();
 
   const [posts, likedPosts, isCurrentUserFollowing] = await Promise.all([
     getUserPosts(user.id),
@@ -39,3 +39,5 @@ export default async function Page(
     />
   );
 }
+
+export default ProfilePageServer;
