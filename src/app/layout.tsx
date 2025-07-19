@@ -18,7 +18,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Socially",
+  title: "SocialSphere",
   description: "Modern Social Media Application powered by Next.js",
 };
 
